@@ -1,44 +1,36 @@
-# Label-Free Embedding Fine-Tuning for RAG
-<!-- 
-## Why fine-tune embeddings
-Like everyone else, you build your RAG system with OpenAI embedding.
-But is that the end all?
-What is my data is very domain specific, with a lot of technical jargons not commonly seen on the internet.
-Or the formatting of the file is very esoteric.
-Or the retrieval just sucks, and you want to make it better.
+# Fine-Tuning Embedding for RAG with Synthetic Data
+This repo shows you how to fine-tune an embedding model to improve RAG performance even if you don't have labelled data (i.e. positive pairs of query/relevant documents). 
 
+We walkthrough step-by-step the process of generating a synthetic dataset with LLM, finetuning an opensource embedding model, and finally evaluating the finetuned model.
 
-You realize the generation is good. It's actually the retrieval that's failing.
-You have some domain specific dataset, now you want to finetune the embedding model on it. 
+We experiment with a small scale dataset of financial PDF documents, and show that finetuning the embedding model can substantially improve retrieval performance.
 
+### Setup
+To get started, clone this repo and install requirements:
+```
+git clone git@github.com:run-llama/finetune-embedding.git
+pip install -r requirements.txt
+```
 
-## How to run this
-In your environment, run `pip install -r requirements.txt` to install necessary requirements.
+Then you can run the notebooks (i.e. via `jupyter lab`).
+> The notebooks are fairly lightweight, and should work on almost any machines.
 
-1. Run `generate_dataset.ipynb` to generate a synthetic dataset from a corpus of documents.
-2. Run `fine_tune.ipynb` to fine-tune the embedding, and evaluate on the validation set.
+### Steps for running
+1. Run through [generate_dataset.ipynb](./generate_dataset.ipynb) to generate a synthetic dataset for training and evaluation
+2. Run through [finetune.ipynb](./finetune.ipynb) to finetune a pretrained opensource embedding model
+3. Run through [evaluate.ipynb](./evaluate.ipynb) to evaluate the finetuned model against e.g. the pretrained base embedding model and proprietary OpenAI embedding model.
 
-That's it.
+### How this works
+**1. Generating synthetic dataset for training and evaluation**
 
-## How this works
-The key idea is to use LLM to generate synthetic positive example pairs.
+The key idea here is that we can leverage an LLM to generate hypothetical questions that are best answered by a given piece of context. This allows us to generate synthetic positive pairs of (query, relevant documents) in a scalable way without requiring human labellers. 
 
+More concretely, we first process the given documents into a corpus of text chunks. Then for each text chunk, we use LLM to generate a few hypothetical questions that can be answered with information form that text chunk. Finally, we collect all pairs of questions and text chunks as the dataset. 
 
-### Step 1: generate synthetic
-> [generate_dataset.ipynb](./generate_dataset.ipynb)  
+**2. Finetuning an opensource embedding model**
 
-notebook for generating a synthetic dataset of question & answer pairs.
+We leverage the high-level model fitting API from `sentencetransformers` to very easily setup a training process. We use `MultipleNegativesRankingLoss` as the training object and `InformationRetrievalEvaluator` as the evaluator during training. We use the opensource "BAAI/bge-small-en" as the base model and train for a small number of epochs.
 
-We split this into train/val split.
+**3. Evaluating the embedding model**
 
-### Step 2: setup evaluation
-> [evaluate.ipynb](./evaluate.ipynb)  
-> [evaluate_st.ipynb](./evaluate_st.ipynb)  
-
-We consider two ways of setting up the evaluator:
-1. evaluator from sentence transformer: the benefit of this is that you can directly get access to a suite of evaluation
-2. custom evaluator: the benefit for this is that you can evaluate arbitrary embedding models (include openAI embeddings)
-
-### Step 3: Fine-tune your embeddings
-> [fine_tune.ipyb](./fine_tune.ipynb)
-Once we have our training dataset, to fine-tune is super straightforward. We just need to select a reasonable loss function, and have a good strategy for when to stop training. -->
+We compare the finetuned model against the base model, as well as the OpenAI embedding model. We evaluate with `InformationRetrievalEvaluator` as well as a simple hit rate metric.
