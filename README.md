@@ -1,5 +1,5 @@
 # Label-Free Embedding Fine-Tuning for RAG
-
+<!-- 
 ## Why fine-tune embeddings
 Like everyone else, you build your RAG system with OpenAI embedding.
 But is that the end all?
@@ -41,4 +41,4 @@ We consider two ways of setting up the evaluator:
 
 ### Step 3: Fine-tune your embeddings
 > [fine_tune.ipyb](./fine_tune.ipynb)
-Once we have our training dataset, to fine-tune is super straightforward. We just need to select a reasonable loss function, and have a good strategy for when to stop training.
+Once we have our training dataset, to fine-tune is super straightforward. We just need to select a reasonable loss function, and have a good strategy for when to stop training. -->
