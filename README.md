@@ -6,9 +6,11 @@ We walkthrough step-by-step the process of generating a synthetic dataset with L
 We experiment with a small scale dataset of financial PDF documents, and show that finetuning the embedding model can substantially improve retrieval performance.
 
 ### Setup
-To get started, clone this repo and install requirements:
+To get started, clone this repo and install requirements. You also need to clone the llama_index repo to obtain the example PDFs.
 ```
+git clone git@github.com:jerryjliu/llama_index
 git clone git@github.com:run-llama/finetune-embedding.git
+cd finetune-embedding
 pip install -r requirements.txt
 ```
 
