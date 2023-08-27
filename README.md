@@ -25,11 +25,11 @@ Then you can run the notebooks (i.e. via `jupyter lab`).
 
 The key idea here is that we can leverage an LLM to generate hypothetical questions that are best answered by a given piece of context. This allows us to generate synthetic positive pairs of (query, relevant documents) in a scalable way without requiring human labellers. 
 
-More concretely, we first process the given documents into a corpus of text chunks. Then for each text chunk, we use LLM to generate a few hypothetical questions that can be answered with information form that text chunk. Finally, we collect all pairs of questions and text chunks as the dataset. 
+More concretely, we first process the given documents into a corpus of text chunks. Then for each text chunk, we use LLM to generate a few hypothetical questions that can be answered with information from that text chunk. Finally, we collect all pairs of questions and text chunks as the dataset. 
 
 **2. Finetuning an opensource embedding model**
 
-We leverage the high-level model fitting API from `sentencetransformers` to very easily setup a training process. We use `MultipleNegativesRankingLoss` as the training object and `InformationRetrievalEvaluator` as the evaluator during training. We use the opensource "BAAI/bge-small-en" as the base model and train for a small number of epochs.
+We leverage the high-level model fitting API from `sentencetransformers` to very easily setup a training process. We use `MultipleNegativesRankingLoss` as the training objective and `InformationRetrievalEvaluator` as the evaluator during training. We use the opensource "BAAI/bge-small-en" as the base model and train for a small number of epochs.
 
 **3. Evaluating the embedding model**
 
