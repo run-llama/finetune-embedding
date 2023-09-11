@@ -1,4 +1,7 @@
 # Fine-Tuning Embedding for RAG with Synthetic Data
+
+**UPDATE 9/10/2023**: We've included embedding finetuning abstractions into the LlamaIndex repo, so this repo is technically outdated! Please check out our [embedding fine-tuning guides](https://gpt-index.readthedocs.io/en/latest/end_to_end_tutorials/finetuning.html#finetuning-embeddings-for-better-retrieval-performance) in the core documentation.
+
 This repo shows you how to fine-tune an embedding model to improve RAG performance even if you don't have labelled data (i.e. positive pairs of query/relevant documents). 
 
 We walkthrough step-by-step the process of generating a synthetic dataset with LLM, finetuning an opensource embedding model, and finally evaluating the finetuned model.
